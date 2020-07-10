@@ -1,10 +1,10 @@
 <?php
+session_start();
 require 'database.php';
-require 'class/User.php';
-$stmt = $conn->prepare("SELECT * FROM user WHERE maSV=? AND password=?");
-$maSV = $_POST["maSV"];
+$stmt = $conn->prepare("SELECT * FROM user WHERE username=? AND password=?");
+$username = $_POST["maSV"];
 $password = $_POST["password"];
-$stmt->bind_param("ss", $maSV, $password);
+$stmt->bind_param("ss", $username, $password);
 $stmt->execute();
 $res = $stmt->get_result();
 $row = $res->fetch_assoc();
@@ -12,7 +12,17 @@ $row = $res->fetch_assoc();
 if ($row == null) {
     echo "Invalid username or password";
 } else {
-    $user = new User($row['id'], $row['maSV'], $row['hoTen'], $row['role']);
-    $_SESSION["user"] = $user;
+    $userId = $row['id'];
+    $username = $row['username'];
+    $fullName = $row['hoTen'];
+    $role =  $row['role'];
+    $classId = $row['LopmaLop'];
+
+    $_SESSION["userId"] = $userId;
+    $_SESSION["username"] = $username;
+    $_SESSION["fullName"] = $fullName;
+    $_SESSION["role"] = $role;
+    $_SESSION["classId"] = $classId;
+
     header("Location:main.php");
 }

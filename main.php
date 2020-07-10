@@ -1,5 +1,6 @@
-<?php require "class/User.php";
-session_start() ?>
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 
@@ -38,15 +39,15 @@ session_start() ?>
 
 <body>
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Quản lý sinh viên</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
             data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    Quản lý sinh viên
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sign out</a>
+            <a class="nav-link" href="logout.php">Đăng xuất</a>
         </li>
     </ul>
 </nav>
@@ -58,71 +59,20 @@ session_start() ?>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">
-                            <span data-feather="home"></span>
-                            Điểm thi <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Customers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
                             <span data-feather="bar-chart-2"></span>
-                            Reports
+                            Điểm thi
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="studentlist.php">
+                            <span data-feather="users"></span>
+                            Danh sách lớp
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">
                             <span data-feather="layers"></span>
-                            Integrations
-                        </a>
-                    </li>
-                </ul>
-
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
-                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Current month
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Last quarter
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Social engagement
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Year-end sale
+                            Thông tin cá nhân
                         </a>
                     </li>
                 </ul>
@@ -136,15 +86,18 @@ session_start() ?>
 
             <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-            <h2>Chi tiết điểm thi</h2>
+            <h2>Lịch sử điểm thi</h2>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
                         <th>Môn học</th>
+                        <th>Số tín chỉ</th>
                         <th>Học kỳ</th>
                         <th>Chuyên cần</th>
                         <th>Thực hành</th>
+                        <th>Kiểm tra</th>
+                        <th>Bài tập</th>
                         <th>Thi</th>
                         <th>Điểm môn (Hệ 10)</th>
                         <th>Điểm môn (chữ)</th>
@@ -153,30 +106,51 @@ session_start() ?>
                     <tbody>
                     <?php
                     require 'database.php';
-                    $stmt = $conn->prepare("SELECT * FROM diem,monhoc WHERE diem.monhocid=monhoc.id");
+                    $userId = $_SESSION["userId"];
+                    $stmt = $conn->prepare("SELECT * FROM diem,monhoc WHERE diem.monhocid=monhoc.id AND `Sinh viênid`=?");
+                    $stmt->bind_param("s", $userId);
                     $stmt->execute();
                     $res = $stmt->get_result();
-                    // $row = $res->fetch_assoc();
+
+                    $totalCredit = 0;
+                    $totalScore = 0;
 
                     while ($row = $res->fetch_assoc()) {
-                        echo $_SESSION["user"] as User;
-                        $weight = $row['trongSo'];
-                        $weightArr = explode("_", $weight);
-                        $attendanceWeight = $weightArr[0] / 100;
-                        $practiceWeight = $weightArr[1] / 100;
-                        $testWeight = $weightArr[2] / 100;
-                        $diemCC = $row['diemCC'];
-                        $diemTH = $row['diemTH'];
-                        $diemThi = $row['diemThi'];
-                        $avgScore = $diemCC * $attendanceWeight + $diemTH * $practiceWeight + $diemThi * $testWeight;
+                        $attendanceWeight = $row['trongSoCC'];
+                        $labWeight = $row['trongSoTH'];
+                        $midtermWeight = $row['trongSoKT'];
+                        $projectWeight = $row['trongSoBTL'];
+                        $testWeight = $row['trongSoThi'];
+
+                        $attendanceScore = $row['diemCC'];
+                        $labScore = $row['diemTH'];
+                        $midtermScore = $row['diemKT'];
+                        $projectScore = $row['diemBTL'];
+                        $testScore = $row['diemThi'];
+
+                        $credit = $row['soTinChi'];
+
+                        $avgScore = calculateAvgScore($attendanceScore, $attendanceWeight, $labScore, $labWeight, $midtermScore, $midtermWeight, $projectScore, $projectWeight, $testScore, $testWeight);
+
+                        $totalCredit += $credit;
+                        $totalScore += calculateScore4($avgScore)*$credit;
+
                         echo "<tr>";
-                        echo "<td>" . $row['tenMonHoc'] . "</td>";
+                        echo "<td><b>"  . $row['tenMonHoc'] . "</b></td>";
+                        echo "<td>" . $credit . "</td>";
                         echo "<td>" . $row['hocKy'] . "</td>";
                         echo "<td>" . $row['diemCC'] . "</td>";
                         echo "<td>" . $row['diemTH'] . "</td>";
+                        echo "<td>" . $row['diemKT'] . "</td>";
+                        echo "<td>" . $row['diemBTL'] . "</td>";
                         echo "<td>" . $row['diemThi'] . "</td>";
                         echo "<td>" . $avgScore . "</td>";
                         echo "<td>" . calculateTextScore($avgScore) . "</td>";
+                    }
+
+                    function calculateAvgScore($attendanceScore, $attendanceWeight, $labScore, $labWeight, $midtermScore, $midtermWeight, $projectScore, $projectWeight, $testScore, $testWeight)
+                    {
+                        return $attendanceScore * $attendanceWeight + $labScore * $labWeight + $midtermScore * $midtermWeight + $projectScore * $projectWeight + $testScore * $testWeight;
                     }
 
                     function calculateTextScore($avgScore)
@@ -202,9 +176,58 @@ session_start() ?>
                         }
                     }
 
+                    function calculateScore4($score10)
+                    {
+                        $textScore = calculateTextScore($score10);
+
+                        switch ($textScore) {
+                            case "F":
+                                return 0;
+                            case "D":
+                                return 1;
+                            case "D+":
+                                return 1.5;
+                            case "C":
+                                return 2;
+                            case "C+":
+                                return 2.5;
+                            case "B":
+                                return 3;
+                            case "B+":
+                                return 3.5;
+                            case "A":
+                                return 3.7;
+                            case "A+":
+                                return 4;
+                            default:
+                                return 0;
+                        }
+                    }
+
+                    function calculateRank($gpa) {
+                        if ($gpa < 1) {
+                            return "Kém";
+                        } else if ($gpa < 1.99) {
+                            return "Yếu";
+                        } else if ($gpa < 2.49) {
+                            return "Trung bình";
+                        } else if ($gpa < 3.19) {
+                            return "Khá";
+                        } else if ($gpa < 3.59) {
+                            return 'Giỏi';
+                        } else if ($gpa <= 4) {
+                            return "Xuất sắc";
+                        }
+                        return "";
+                    }
+
                     ?>
                     </tbody>
                 </table>
+
+                <p>Tổng số tín chỉ: <?php echo $totalCredit ?></p>
+                <p>Điểm trung bình tích lũy: <?php echo $totalScore/$totalCredit ?></p>
+                <p>Xếp loại: <?php echo calculateRank($totalScore/$totalCredit) ?></p>
             </div>
         </main>
     </div>
