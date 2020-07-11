@@ -15,7 +15,7 @@ session_start();
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/3/">
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="/phpchay/css/bootstrap.css" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -34,7 +34,7 @@ session_start();
         }
     </style>
     <!-- Custom styles for this template -->
-    <link href="dashboard.css" rel="stylesheet">
+    <link href="/phpchay/dashboard.css" rel="stylesheet">
 </head>
 
 <body>
@@ -46,7 +46,7 @@ session_start();
     </button>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="logout.php">Đăng xuất</a>
+            <a class="nav-link" href="/phpchay/logout.php">Đăng xuất</a>
         </li>
     </ul>
 </nav>

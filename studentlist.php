@@ -19,13 +19,14 @@ include 'header.php' ?>
                             <th>SĐT</th>
                             <th>Khoa</th>
                             <th>Niên khóa</th>
+                            <?php if ($_SESSION['role'] == 0) echo "<th>Thao tác</th>"; ?>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
                         require 'database.php';
                         $classId = $_SESSION['classId'];
-                        $stmt = $conn->prepare("SELECT hoTen, dob, diaChi, sdt, khoa, nienKhoa FROM lop, user WHERE lop.maLop = user.LopmaLop AND user.LopmaLop = ?");
+                        $stmt = $conn->prepare("SELECT user.id, hoTen, dob, diaChi, sdt, khoa, nienKhoa FROM lop, user WHERE lop.maLop = user.LopmaLop AND user.LopmaLop = ? AND role = 1");
                         $stmt->bind_param("s", $classId);
                         $stmt->execute();
                         $res = $stmt->get_result();
@@ -45,10 +46,18 @@ include 'header.php' ?>
                             echo "<td>" . $phone . "</td>";
                             echo "<td>" . $course . "</td>";
                             echo "<td>" . $year . "</td>";
+                            if ($_SESSION['role'] == 0) {
+                                echo "<td><a class='badge badge-danger' href='deletestudent.php?id=" . $row['id'] . "'>Xóa</a><a class='badge badge-primary' href='editstudent.php?id=" . $row['id'] . "'>Sửa</a></td>";
+                            }
                         }
                         ?>
                         </tbody>
                     </table>
+
+                    <?php if ($_SESSION['role'] == 0) {
+                        include 'studentmanagement.php';
+                    }
+                    ?>
             </main>
         </div>
     </div>

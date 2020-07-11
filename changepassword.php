@@ -21,4 +21,4 @@ if ($oldPassword == $confirmedPassword) {
     header('location: profile.php');
 } else {
     echo "Old password does not match!";
-}dd
+}
