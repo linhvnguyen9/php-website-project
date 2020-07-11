@@ -16,16 +16,6 @@ $address = $row['diaChi'];
 $idCard = $row['cmt'];
 $phoneNumber = $row['sdt'];
 $course = $row['khoa'];
-
-//TODO: Newly updated data not showing up!!!!
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $newAddress = $_POST["address"];
-    $newPhoneNumber = $_POST["phoneNumber"];
-
-    $stmt = $conn->prepare("UPDATE user SET diaChi = ?, sdt = ? WHERE id = ?");
-    $stmt->bind_param("ssi", $newAddress, $newPhoneNumber, $userId);
-    $stmt->execute();
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -109,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Thông tin cá nhân</h1>
             </div>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <form action="updateinfo.php" method="post">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Họ tên</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
@@ -145,14 +135,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2 mt-5">Đổi mật khẩu</h1>
             </div>
-            <form action="login.php" method="post">
+            <form action="changepassword.php" method="post">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Mật khẩu cũ</label>
-                    <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="confirmedPassword">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Mật khẩu mới</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="newPassword">
                 </div>
                 <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
             </form>
