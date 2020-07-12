@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Thêm sinh viên</h1>
     </div>
-    <form action="addstudent.php" method="post">
+    <form action="functions/addstudent.php" method="post">
         <div class="form-group">
             <label for="exampleInputEmail1">Mã sinh viên</label>
             <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username"

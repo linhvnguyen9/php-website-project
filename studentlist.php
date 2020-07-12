@@ -9,6 +9,13 @@ include 'header.php' ?>
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Danh sách lớp</h1>
                 </div>
+                <form class="mb-5" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Tìm kiếm</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập tên" name="name">
+                    </div>
+                    <button type="submit" class="btn btn-primary ">Tìm</button>
+                </form>
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead>
@@ -24,12 +31,15 @@ include 'header.php' ?>
                         </thead>
                         <tbody>
                         <?php
-                        require 'database.php';
+                        require 'functions/database.php';
                         $classId = $_SESSION['classId'];
-                        $stmt = $conn->prepare("SELECT user.id, hoTen, dob, diaChi, sdt, khoa, nienKhoa FROM lop, user WHERE lop.maLop = user.LopmaLop AND user.LopmaLop = ? AND role = 1");
-                        $stmt->bind_param("s", $classId);
-                        $stmt->execute();
-                        $res = $stmt->get_result();
+
+                        $res;
+                        if (isset($_GET['name']) && $_GET['name'] != "") {
+                            $res = getStudents($conn, $_GET['name'], $classId);
+                        } else {
+                            $res = getStudents($conn, "", $classId);
+                        }
 
                         while ($row = $res->fetch_assoc()) {
                             $fullName = $row['hoTen'];
@@ -47,7 +57,22 @@ include 'header.php' ?>
                             echo "<td>" . $course . "</td>";
                             echo "<td>" . $year . "</td>";
                             if ($_SESSION['role'] == 0) {
-                                echo "<td><a class='badge badge-danger' href='deletestudent.php?id=" . $row['id'] . "'>Xóa</a><a class='badge badge-primary' href='editstudent.php?id=" . $row['id'] . "'>Sửa</a></td>";
+                                echo "<td><a class='badge badge-danger' href='functions/deletestudent.php?id=" . $row['id'] . "'>Xóa</a><a class='badge badge-primary' href='editstudent.php?id=" . $row['id'] . "'>Sửa</a></td>";
+                            }
+                        }
+
+                        function getStudents($conn, $nameQuery, $classId) {
+                            if ($nameQuery != "") {
+                                $nameQuery = "%" . $nameQuery . "%";
+                                $stmt = $conn->prepare("SELECT user.id, hoTen, dob, diaChi, sdt, khoa, nienKhoa FROM lop, user WHERE lop.maLop = user.LopmaLop AND user.LopmaLop = ? AND role = 1 AND hoten LIKE ?");
+                                $stmt->bind_param("ss", $classId, $nameQuery);
+                                $stmt->execute();
+                                return $stmt->get_result();
+                            } else {
+                                $stmt = $conn->prepare("SELECT user.id, hoTen, dob, diaChi, sdt, khoa, nienKhoa FROM lop, user WHERE lop.maLop = user.LopmaLop AND user.LopmaLop = ? AND role = 1");
+                                $stmt->bind_param("s", $classId);
+                                $stmt->execute();
+                                return $stmt->get_result();
                             }
                         }
                         ?>

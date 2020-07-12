@@ -24,5 +24,5 @@ if ($row == null) {
     $_SESSION["role"] = $role;
     $_SESSION["classId"] = $classId;
 
-    header("Location:main.php");
+    header("Location: ../main.php");
 }

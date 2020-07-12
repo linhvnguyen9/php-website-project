@@ -3,7 +3,7 @@ $page = "profile";
 include 'header.php' ?>
 
 <?php
-require 'database.php';
+require 'functions/database.php';
 $userId = $_SESSION['userId'];
 
 $stmt = $conn->prepare("SELECT * FROM user WHERE id = ?");
@@ -28,7 +28,7 @@ $course = $row['khoa'];
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Thông tin cá nhân</h1>
                 </div>
-                <form action="updateinfo.php" method="post">
+                <form action="functions/updateinfo.php" method="post">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Họ tên</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
@@ -64,7 +64,7 @@ $course = $row['khoa'];
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2 mt-5">Đổi mật khẩu</h1>
                 </div>
-                <form action="changepassword.php" method="post">
+                <form action="functions/changepassword.php" method="post">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Mật khẩu cũ</label>
                         <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"

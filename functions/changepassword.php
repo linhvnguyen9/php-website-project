@@ -18,7 +18,7 @@ if ($oldPassword == $confirmedPassword) {
     $stmt->bind_param("si", $newPassword, $userId);
     $stmt->execute();
 
-    header('location: profile.php');
+    header('location: ../profile.php');
 } else {
     echo "Old password does not match!";
 }

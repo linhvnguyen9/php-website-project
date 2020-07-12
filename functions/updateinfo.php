@@ -14,4 +14,4 @@ $stmt = $conn->prepare("UPDATE user SET diaChi = ?, sdt = ? WHERE id = ?");
 $stmt->bind_param("ssi", $newAddress, $newPhoneNumber, $userId);
 $stmt->execute();
 
-header('location: profile.php');
+header('location: ../profile.php');

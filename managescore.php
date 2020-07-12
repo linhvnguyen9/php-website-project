@@ -1,10 +1,11 @@
-<h2>Lịch sử điểm thi</h2>
+<h2>Bảng điểm lớp</h2>
 <div class="table-responsive">
     <table class="table table-striped table-sm">
         <thead>
         <tr>
+            <th>Họ tên</th>
+            <th>Mã SV</th>
             <th>Môn học</th>
-            <th>Số tín chỉ</th>
             <th>Học kỳ</th>
             <th>Chuyên cần</th>
             <th>Thực hành</th>
@@ -13,14 +14,17 @@
             <th>Thi</th>
             <th>Điểm môn (Hệ 10)</th>
             <th>Điểm môn (chữ)</th>
+            <th>Thao tác</th>
         </tr>
         </thead>
         <tbody>
         <?php
-        require 'database.php';
-        $userId = $_SESSION["userId"];
-        $stmt = $conn->prepare("SELECT * FROM diem,monhoc WHERE diem.monhocid=monhoc.id AND `Sinh viênid`=?");
-        $stmt->bind_param("s", $userId);
+        include 'functions/database.php';
+        include 'functions/calculatescore.php';
+
+        $classId = $_SESSION["classId"];
+        $stmt = $conn->prepare("SELECT * FROM diem,monhoc,user WHERE diem.monhocid=monhoc.id AND `Sinh viênid`=user.id AND LopmaLop=?");
+        $stmt->bind_param("i", $classId);
         $stmt->execute();
         $res = $stmt->get_result();
 
@@ -48,8 +52,9 @@
             $totalScore += calculateScore4($avgScore) * $credit;
 
             echo "<tr>";
+            echo "<td><b>" . $row['hoTen'] . "</b></td>";
+            echo "<td><b>" . $row['username'] . "</b></td>";
             echo "<td><b>" . $row['tenMonHoc'] . "</b></td>";
-            echo "<td>" . $credit . "</td>";
             echo "<td>" . $row['hocKy'] . "</td>";
             echo "<td>" . $row['diemCC'] . "</td>";
             echo "<td>" . $row['diemTH'] . "</td>";
@@ -58,87 +63,9 @@
             echo "<td>" . $row['diemThi'] . "</td>";
             echo "<td>" . $avgScore . "</td>";
             echo "<td>" . calculateTextScore($avgScore) . "</td>";
+            echo "<td><a class='badge badge-primary' href='editstudent.php?id=" . $row['id'] . "'>Sửa</a></td>";
         }
-
-        function calculateAvgScore($attendanceScore, $attendanceWeight, $labScore, $labWeight, $midtermScore, $midtermWeight, $projectScore, $projectWeight, $testScore, $testWeight)
-        {
-            return $attendanceScore * $attendanceWeight + $labScore * $labWeight + $midtermScore * $midtermWeight + $projectScore * $projectWeight + $testScore * $testWeight;
-        }
-
-        function calculateTextScore($avgScore)
-        {
-            if ($avgScore < 4) {
-                return "F";
-            } else if ($avgScore < 4.9) {
-                return "D";
-            } else if ($avgScore < 5.4) {
-                return "D+";
-            } else if ($avgScore < 6.4) {
-                return "C";
-            } else if ($avgScore < 6.9) {
-                return "C+";
-            } else if ($avgScore < 7.9) {
-                return "B";
-            } else if ($avgScore < 8.4) {
-                return "B+";
-            } else if ($avgScore < 8.9) {
-                return "A";
-            } else {
-                return "A+";
-            }
-        }
-
-        function calculateScore4($score10)
-        {
-            $textScore = calculateTextScore($score10);
-
-            switch ($textScore) {
-                case "F":
-                    return 0;
-                case "D":
-                    return 1;
-                case "D+":
-                    return 1.5;
-                case "C":
-                    return 2;
-                case "C+":
-                    return 2.5;
-                case "B":
-                    return 3;
-                case "B+":
-                    return 3.5;
-                case "A":
-                    return 3.7;
-                case "A+":
-                    return 4;
-                default:
-                    return 0;
-            }
-        }
-
-        function calculateRank($gpa)
-        {
-            if ($gpa < 1) {
-                return "Kém";
-            } else if ($gpa < 1.99) {
-                return "Yếu";
-            } else if ($gpa < 2.49) {
-                return "Trung bình";
-            } else if ($gpa < 3.19) {
-                return "Khá";
-            } else if ($gpa < 3.59) {
-                return 'Giỏi';
-            } else if ($gpa <= 4) {
-                return "Xuất sắc";
-            }
-            return "";
-        }
-
         ?>
         </tbody>
     </table>
-
-    <p>Tổng số tín chỉ: <?php echo $totalCredit ?></p>
-    <p>Điểm trung bình tích lũy: <?php echo $totalScore / $totalCredit ?></p>
-    <p>Xếp loại: <?php echo calculateRank($totalScore / $totalCredit) ?></p>
 </div>

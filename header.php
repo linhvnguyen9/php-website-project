@@ -49,7 +49,7 @@
     </button>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="/phpchay/logout.php">Đăng xuất</a>
+            <a class="nav-link" href="/phpchay/functions/logout.php">Đăng xuất</a>
         </li>
     </ul>
 </nav>

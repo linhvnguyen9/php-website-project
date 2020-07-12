@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-require 'database.php';
+require 'functions/database.php';
 $id = htmlspecialchars($_GET["id"]);
 $stmt = $conn->prepare("SELECT * FROM user WHERE id= ?");
 $stmt->bind_param("i", $id);
@@ -23,7 +23,6 @@ $year = $row['nienKhoa'];
         <?php include 'nav.php' ?>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-<!--deletestudent.php?id=" . $row['id'] . "'-->
             <?php echo "<form action=\"functions/editstudent.php?id=" . $id . "\"method=\"post\">"?>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Mã sinh viên</label>

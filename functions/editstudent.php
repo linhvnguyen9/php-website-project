@@ -1,5 +1,5 @@
 <?php
-require '../database.php';
+require 'database.php';
 
 $fullName = $_POST['fullName'];
 $dob = $_POST['dob'];
