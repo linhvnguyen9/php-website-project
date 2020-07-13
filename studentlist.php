@@ -5,17 +5,20 @@ include 'header.php' ?>
         <div class="row">
             <?php include 'nav.php' ?>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Danh sách lớp</h1>
-                </div>
-                <form class="mb-5" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Tìm kiếm</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập tên" name="name">
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 ">
+                <div class="container">
+                    <div class="row">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom col-md-8">
+                            <h1 class="h2">Danh sách lớp</h1>
+                        </div>
+                        <form class="col-md-4 form-inline" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập tên" name="name">
+                            </div>
+                            <button type="submit" class="btn btn-primary col-md-4">Tìm</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-primary ">Tìm</button>
-                </form>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead>

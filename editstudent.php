@@ -1,4 +1,5 @@
 <?php
+$page = 'studentlist';
 include 'header.php';
 require 'functions/database.php';
 $id = htmlspecialchars($_GET["id"]);
