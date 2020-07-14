@@ -10,7 +10,7 @@ require 'functions/database.php';
         <?php include 'nav.php' ?>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <?php echo "<form action=\"inputscorestudentlist.php?id=" . $_GET['id'] . "\"method=\"post\">"?>
+            <?php echo "<form action=\"inputscorestudentlist.php?id=" . $_GET['id'] . "\"method=\"post\">" ?>
             <div class="form-group">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Học kỳ</label>
