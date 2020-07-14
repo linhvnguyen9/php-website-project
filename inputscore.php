@@ -2,22 +2,11 @@
 include 'header.php';
 $page = 'subject';
 require 'functions/database.php';
-
-$id = htmlspecialchars($_GET["id"]);
-$stmt = $conn->prepare("SELECT * FROM user WHERE id= ?");
-$stmt->bind_param("i", $id);
+$studentId = $_GET['studentId'];
+$stmt = $conn->prepare("SELECT username, hoTen FROM user WHERE id=$studentId");
 $stmt->execute();
 $res = $stmt->get_result();
 $row = $res->fetch_assoc();
-
-$username = $row['username'];
-$fullName = $row['hoTen'];
-$dob = $row['dob'];
-$address = $row['diaChi'];
-$idCard = $row['cmt'];
-$phone = $row['sdt'];
-$course = $row['khoa'];
-$year = $row['nienKhoa'];
 ?>
 
 <div class="container-fluid">
@@ -25,60 +14,63 @@ $year = $row['nienKhoa'];
         <?php include 'nav.php' ?>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <form action="subject.php">
+            <form action="functions/savescore.php" method="post">
+                <input readonly type="hidden" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                       name="studentId"
+                       value="<?php echo $_GET['studentId'] ?>"
+                >
+                <input type="hidden" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                       name="subjectId"
+                       value="<?php echo $_GET['subjectId'] ?>"
+                >
                 <div class="form-group">
                     <label for="exampleInputEmail1">Mã sinh viên</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    <input readonly type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                            name="username"
-                           disabled="disabled"
-                           value="<?php echo $username ?>"
+                           value="<?php echo $row['username'] ?>"
                     >
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Họ tên</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                               name="fullName"
-                               value="<?php echo $fullName ?>"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Ngày sinh</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" name="dob"
-                               value="<?php echo $dob ?>"
-                        >
-                    </div>
-                    <div class=" form-group">
-                        <label for="exampleInputPassword1">Địa chỉ</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1"
-                               name="address"
-                               value="<?php echo $address ?>"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Số CMT</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" name="idCard"
-                               value="<?php echo $idCard ?>"
-                        >
-                    </div>
-                    <div class=" form-group">
-                        <label for="exampleInputPassword1">SĐT</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1"
-                               name="phoneNumber"
-                               value="<?php echo $phone ?>"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Khoa</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" name="course"
-                               value="<?php echo $course ?>"
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Niên khóa</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" name="year"
-                               value="<?php echo $year ?>"
-                        >
-                    </div>
-                    <button type="submit" class="btn btn-primary">Sửa</button>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Họ tên</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                           name="fullName"
+                           disabled="disabled"
+                           value="<?php echo $row['hoTen'] ?>"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Học kỳ</label>
+                    <input readonly type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                           name="semester"
+                           value="<?php echo $_GET['semester'] ?>"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Điểm CC</label>
+                    <input type="number" class="form-control" id="exampleInputPassword1" name="diemCC"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Điểm TH</label>
+                    <input type="number" class="form-control" id="exampleInputPassword1" name="diemTH"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Điểm KT</label>
+                    <input type="number" class="form-control" id="exampleInputPassword1" name="diemKT"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Điểm BTL</label>
+                    <input type="number" class="form-control" id="exampleInputPassword1" name="diemBTL"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Điểm thi</label>
+                    <input type="number" class="form-control" id="exampleInputPassword1" name="diemThi"
+                    >
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu</button>
             </form>
         </main>
     </div>
