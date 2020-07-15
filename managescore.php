@@ -27,7 +27,6 @@
             <th>Thi</th>
             <th>Điểm môn (Hệ 10)</th>
             <th>Điểm môn (chữ)</th>
-            <th>Thao tác</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +35,8 @@
         include 'functions/calculatescore.php';
 
         if (isset($_GET['sort'])) {
-            $res = sortScores($conn, $_GET['sort']);
+            $sort = $_GET['sort'];
+            $res = sortScores($conn, $sort);
         } else {
             $res = sortScores($conn, "");
         }
@@ -75,7 +75,6 @@
             echo "<td>" . $row['diemThi'] . "</td>";
             echo "<td>" . $avgScore . "</td>";
             echo "<td>" . calculateTextScore($avgScore) . "</td>";
-            echo "<td><a class='badge badge-primary' href='editstudent.php?id=" . $row['id'] . "'>Sửa</a></td>";
         }
 
         function sortScores($conn, $sort)
@@ -86,12 +85,14 @@
                 $stmt = $conn->prepare("SELECT * FROM diem,monhoc,user WHERE diem.monhocid=monhoc.id AND `Sinh viênid`=user.id AND LopmaLop=? ORDER BY tenMonHoc");
                 $stmt->bind_param("i", $classId);
                 $stmt->execute();
-                return $stmt->get_result();
-            } else if ($sort == "studentName") {
+                $res = $stmt->get_result();
+                return $res;
+            } else if ($sort == "studentname") {
                 $stmt = $conn->prepare("SELECT * FROM diem,monhoc,user WHERE diem.monhocid=monhoc.id AND `Sinh viênid`=user.id AND LopmaLop=? ORDER BY hoTen");
                 $stmt->bind_param("i", $classId);
                 $stmt->execute();
-                return $stmt->get_result();
+                $res = $stmt->get_result();
+                return $res;
             } else {
                 $stmt = $conn->prepare("SELECT * FROM diem,monhoc,user WHERE diem.monhocid=monhoc.id AND `Sinh viênid`=user.id AND LopmaLop=?");
                 $stmt->bind_param("i", $classId);
