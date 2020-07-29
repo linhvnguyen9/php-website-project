@@ -5,8 +5,7 @@
 window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
 </script>
 <script src="/phpchay/js/bootstrap.bundle.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="/phpchay/js/feather.min.js"></script>
 <script src="/phpchay/js/dashboard.js"></script>
 </body>
 

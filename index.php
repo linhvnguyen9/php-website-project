@@ -37,7 +37,7 @@ session_start();
 </head>
 <body class="text-center">
 <form action="functions/login.php" method="post" class="form-signin">
-    <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <img class="mb-4" src="/phpchay/assets/bootstrap-solid.svg" alt="" width="72" height="72">
     <h1 class="h3 mb-3 font-weight-normal">Đăng nhập</h1>
     <label for="inputEmail" class="sr-only">Tên tài khoản / Mã SV</label>
     <input type="text" id="inputEmail" class="form-control" placeholder="Tên tài khoản / Mã SV" required autofocus
